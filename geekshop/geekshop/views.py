@@ -1,8 +1,8 @@
 from django.shortcuts import render
 header_menu = [
         {'href': '/', 'name': 'home'},
-        {'href': 'products', 'name': 'products'},
-        {'href': 'contacts', 'name': 'contacts'},
+        {'href': '/products/', 'name': 'products'},
+        {'href': '/contacts/', 'name': 'contacts'},
 ]
 
 

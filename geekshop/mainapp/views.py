@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from geekshop.views import header_menu
 
 
 def products(request):
@@ -12,6 +13,7 @@ def products(request):
 
     context = {
         'title': title,
+        'header_menu': header_menu,
         'links_menu': links_menu,
     }
     return render(request, "mainapp/products.html", context)
