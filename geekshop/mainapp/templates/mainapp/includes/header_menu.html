@@ -3,7 +3,7 @@
 		<ul class="menu">
 				{% for link in header_menu %}
 					<li>
-						<a href="{{ link.href }}" class="{% if request.resolver_match.url_name == link.href %}
+						<a href="{% url link.full_name %}" class="{% if request.resolver_match.app_name == link.app_name and request.resolver_match.url_name == link.url_name %}
 									active {% endif %}">{{ link.name }}</a>
 					</li>
 				{% endfor %}
