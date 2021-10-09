@@ -1,16 +1,12 @@
 from django.shortcuts import render
 from geekshop.views import header_menu
+from .models import ProductCategory, Product
 
 
-def products(request):
+def products(request, pk=None):
     title = 'Catalog'
-    links_menu = [
-        {'href': 'products', 'name': 'all'},
-        {'href': 'products_home', 'name': 'home'},
-        {'href': 'products_office', 'name': 'office'},
-        {'href': 'products_classic', 'name': 'classic'},
-    ]
-
+    links_menu = ProductCategory.objects.all()[:6]
+    print(pk)
     context = {
         'title': title,
         'header_menu': header_menu,
