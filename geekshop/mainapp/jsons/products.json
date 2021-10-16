@@ -1,0 +1,29 @@
+[
+  {
+      "category": "Chairs",
+      "name": "Удобный стул",
+      "image": "products_images/chair-1.jpg",
+      "short_desc": "",
+      "description": "Chair",
+      "price": "1000.00",
+      "quantity": 50
+  },
+  {
+      "category": "Tables",
+      "name": "Table 1",
+      "image": "products_images/table-1.jpg",
+      "short_desc": "Table 1",
+      "description": "Some table",
+      "price": "2500.00",
+      "quantity": 43
+  },
+  {
+      "category": "Sofa",
+      "name": "Grey Sofa",
+      "image": "",
+      "short_desc": "Sofa",
+      "description": "grey sofa",
+      "price": "19900.00",
+      "quantity": 5
+  }
+]

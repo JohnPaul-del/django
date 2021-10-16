@@ -4,8 +4,7 @@ from django.db import models
 class ProductCategory(models.Model):
     name = models.CharField(
         max_length=64,
-        verbose_name='name',
-        unique=True)
+        verbose_name='name')
     description = models.TextField(
         verbose_name='description',
         blank=True)
