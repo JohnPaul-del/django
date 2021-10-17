@@ -7,6 +7,18 @@
 									active {% endif %}">{{ link.name }}</a>
 					</li>
 				{% endfor %}
+			{% if user.is_authenticated %}
+			<li>
+				<a href="{% url 'auth:edit' %}">{{ user.first_name|default:user.username }}</a>
+			</li>
+			{% endif %}
+			<li>
+				{% if user.is_authenticated %}
+					<a href="{% url 'auth:logout' %}">Logout</a>
+				{% else %}
+					<a href="{% url 'auth:login' %}">Login</a>
+				{% endif %}
+			</li>
 			</ul>
 	<a href="#" class="search"></a>
     <a href="#" class="basket"></a>

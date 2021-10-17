@@ -1,6 +1,7 @@
 from django.core.management.base import BaseCommand
 import json, os
-from mainapp.models import ProductCategory, Product # через точку тут импорт не работает
+from mainapp.models import ProductCategory, Product
+from authapp.models import ShopUser
 
 JSON_PATH = 'mainapp/jsons'
 
@@ -12,7 +13,6 @@ def load_json_data(file_name):
 
 class Command(BaseCommand):
     def handle(self, *args, **options):
-        Product.
         categories = load_json_data('categories')
         ProductCategory.objects.all().delete()
         for category in categories:
@@ -27,3 +27,7 @@ class Command(BaseCommand):
             product['category'] = _category
             new_product = Product(**product)
             new_product.save()
+
+        super_user = ShopUser.objects.create_superuser('admin', 'test@test.com', '321', age=44)
+        if super_user:
+            print("Created")
