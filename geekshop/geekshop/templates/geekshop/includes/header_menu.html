@@ -1,5 +1,5 @@
 <div class="header clearfix">
-	<a href="index.html" class="logo"></a>
+	<a href="/" class="logo"></a>
 		<ul class="menu">
 				{% for link in header_menu %}
 					<li>
@@ -11,6 +11,14 @@
 			<li>
 				<a href="{% url 'auth:edit' %}">{{ user.first_name|default:user.username }}</a>
 			</li>
+			<li>
+				{% if basket %}
+				<a href="{% url 'basket:view' %}">Basket: ({{ basket|length}} pc.)</a>
+				{% else %}
+				<a href="{% url 'auth:login'}">Basket</a>
+				{% endif %}
+			</li>
+
 			{% endif %}
 			<li>
 				{% if user.is_authenticated %}
@@ -19,6 +27,7 @@
 					<a href="{% url 'auth:login' %}">Login</a>
 				{% endif %}
 			</li>
+
 			</ul>
 	<a href="#" class="search"></a>
     <a href="#" class="basket"></a>
