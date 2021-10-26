@@ -1,0 +1,16 @@
+{% for item in basket %}
+            <tr>
+                <th>{{ forloop.counter }}</th>
+                <td> {{ item.product.name }}</td>
+                <td>
+                    <input  min="0" name="{{ item.pk }}" value="{{ item.quantity }}" type="number">
+                </td>
+                <td> {{ item.product.price }}</td>
+                <td> <a href="{% url 'basket:remove' item.pk %}" class="btn btn-round btn-danger">X</a>
+            </tr>
+{% endfor %}
+{% if basket %}
+    <td colspan="5" class="table-info text-end"><h2>
+        Basket Total: {{ basket.0.total_quantity }} psc. {{ basket.0.total_cost }} R </h2>
+    </td>
+{% endif %}

@@ -18,12 +18,30 @@
       "quantity": 43
   },
   {
+      "category": "Tables",
+      "name": "Table 2",
+      "image": "products_images/i.webp",
+      "short_desc": "Table 1",
+      "description": "Some table",
+      "price": "2000.00",
+      "quantity": 43
+  },
+  {
       "category": "Sofa",
       "name": "Grey Sofa",
-      "image": "",
+      "image": "products_images/i.webp",
       "short_desc": "Sofa",
       "description": "grey sofa",
       "price": "19900.00",
+      "quantity": 5
+  },
+  {
+      "category": "Sofa",
+      "name": "Black Sofa",
+      "image": "products_images/i.webp",
+      "short_desc": "Sofa",
+      "description": "grey sofa",
+      "price": "18900.00",
       "quantity": 5
   }
 ]

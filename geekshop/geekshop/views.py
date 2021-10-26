@@ -12,13 +12,16 @@ header_menu = [
 
 def main(request):
     title = "Shop"
-    basket = Basket.objects.filter(user=request.user)
+    basket = []
+    if request.user.is_authenticated:
+        basket = Basket.objects.filter(user=request.user)
     products = Product.objects.all()[:3]
     context = {
         'title': title,
         'header_menu': header_menu,
         'products': products,
         'basket': basket,
+        'basket_count': basket,
     }
     return render(request, 'geekshop/index.html', context)
 
