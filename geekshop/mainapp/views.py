@@ -3,33 +3,41 @@ from django.shortcuts import render, get_object_or_404
 from geekshop.views import header_menu
 from .models import ProductCategory, Product
 from basketapp.models import Basket
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 
-def products(request, pk=None):
+def products(request, pk=None, page=1):
     title = 'Catalog'
     links_menu = ProductCategory.objects.all()
-    _products = Product.objects.all().order_by('price')
     basket = get_basket(request.user)
     if pk is not None:
         if pk == 0:
-            _products = Product.objects.order_by('price')
-            category = {'name': 'all'}
+            products = Product.objects.filter(is_active=True, category__is_active=True).order_by('price')
+            category = {'pk': 0, 'name': 'all'}
         else:
             category = get_object_or_404(ProductCategory, pk=pk)
-            _products = Product.objects.filter(category__pk=pk).order_by('price')
+            products = Product.objects.filter(category__pk=pk, is_active=True, category__is_active=True).order_by('price')
+        paginator = Paginator(products, 2)
+        try:
+            products_paginator = paginator.page(page)
+        except PageNotAnInteger:
+            products_paginator = paginator.page(1)
+        except EmptyPage:
+            products_paginator = paginator.page(paginator.num_pages)
 
         context = {
             'title': title,
             'header_menu': header_menu,
             'links_menu': links_menu,
             'category': category,
-            'products': _products,
+            'products': products_paginator,
             'basket': basket,
         }
         return render(request, "mainapp/products.html", context)
 
     hot_product = get_hot_product()
     same_products = Product.objects.all()[1:2]
+    products = Product.objects.filter(is_active=True, category__is_active=True).order_by('price')
     context = {
         'title': title,
         'header_menu': header_menu,
