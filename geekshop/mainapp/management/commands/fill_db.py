@@ -28,6 +28,6 @@ class Command(BaseCommand):
             new_product = Product(**product)
             new_product.save()
 
-        super_user = ShopUser.objects.create_superuser('admin', 'test@test.com', '321', age=44)
-        if super_user:
-            print("Created")
+        # super_user = ShopUser.objects.create_superuser('admin', 'test@test.com', '321', age=44)
+        # if super_user:
+        #     print("Created")

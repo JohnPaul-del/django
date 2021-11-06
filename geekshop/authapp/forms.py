@@ -1,6 +1,6 @@
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm, UserChangeForm
 from django import forms
-from authapp.models import ShopUser
+from authapp.models import ShopUser, ShopUserProfile
 import hashlib
 from random import random
 
@@ -14,6 +14,7 @@ class ShopUserLogin(AuthenticationForm):
         super(ShopUserLogin, self).__init__(*args, **kwargs)
         for field_name, field in self.fields.items():
             field.widget.attrs['class'] = 'form-control'
+            field.help_text = ''
 
 
 class ShopUserRegistration(UserCreationForm):
@@ -59,3 +60,15 @@ class ShopUserEdit(UserChangeForm):
         if user_age < 18:
             raise forms.ValidationError("18+ only")
         return user_age
+
+
+class ShopUserProfileEditForm(forms.ModelForm):
+    class Meta:
+        model = ShopUserProfile
+        fields = ('tagline', 'about_me', 'gender')
+
+    def __init__(self, *args, **kwargs):
+        super(ShopUserProfileEditForm, self).__init__(*args, **kwargs)
+        for field_name, field in self.fields.items():
+            field.widget.attrs['class'] = 'form-control'
+            field.help_text = ''
