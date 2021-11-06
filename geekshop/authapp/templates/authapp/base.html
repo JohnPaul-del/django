@@ -1,5 +1,5 @@
-{% load static %}
 <!DOCTYPE html>
+{% load static %}
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -10,7 +10,14 @@
     <title>{{ title|title }}</title>
 </head>
 <body>
+    <div class="container mt-3">
+        {% if messages %}
+        {% for message in messages %}
+        <p>{{ message }}</p>
+        {% endfor %}
+        {% endif %}
     {% block content %}
     {% endblock %}
+    </div>
 </body>
 </html>

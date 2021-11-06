@@ -1,6 +1,8 @@
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm, UserChangeForm
 from django import forms
 from authapp.models import ShopUser
+import hashlib
+from random import random
 
 
 class ShopUserLogin(AuthenticationForm):
@@ -17,7 +19,7 @@ class ShopUserLogin(AuthenticationForm):
 class ShopUserRegistration(UserCreationForm):
     class Meta:
         model = ShopUser
-        fields = ('username', 'password1', 'password2', 'age')
+        fields = ('username', 'email', 'password1', 'password2', 'age')
 
     def __init__(self, *args, **kwargs):
         super(ShopUserRegistration, self).__init__(*args, **kwargs)
@@ -31,11 +33,13 @@ class ShopUserRegistration(UserCreationForm):
             raise forms.ValidationError("18+ only")
         return user_age
 
-    def check_password(self):
-        password_1 = self.cleaned_data['password1']
-        password_2 = self.cleaned_data['password2']
-        if password_1 != password_2:
-            raise forms.ValidationError("Password must match")
+    def save(self):
+        user = super(ShopUserRegistration, self).save()
+        user.is_active = False
+        salt = hashlib.sha1(str(random()).encode('utf8')).hexdigest()[:6]
+        user.activation_key = hashlib.sha1((user.email + salt).encode('utf8')).hexdigest()
+        user.save()
+        return user
 
 
 class ShopUserEdit(UserChangeForm):
