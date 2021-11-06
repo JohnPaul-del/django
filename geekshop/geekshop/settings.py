@@ -69,6 +69,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'mainapp.context_processors.basket',
             ],
         },
     },
@@ -144,3 +145,8 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 LOGIN_URL = '/login/'
 
+DOMAIN_NAME = "http://localhost:8000"
+EMAIL_HOST = 'smtp.mailtrap.io'
+EMAIL_HOST_USER = '26acb486f2799f'
+EMAIL_HOST_PASSWORD = '02062136afe779'
+EMAIL_PORT = '2525'

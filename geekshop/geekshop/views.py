@@ -1,6 +1,5 @@
 from django.shortcuts import render
 from mainapp.models import Product
-from basketapp.models import Basket
 
 
 header_menu = [
@@ -12,16 +11,11 @@ header_menu = [
 
 def main(request):
     title = "Shop"
-    basket = []
-    if request.user.is_authenticated:
-        basket = Basket.objects.filter(user=request.user)
-    products = Product.objects.all()[:3]
+    products = Product.objects.all()
     context = {
         'title': title,
         'header_menu': header_menu,
         'products': products,
-        'basket': basket,
-        'basket_count': basket,
     }
     return render(request, 'geekshop/index.html', context)
 
