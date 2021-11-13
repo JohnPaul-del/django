@@ -8,24 +8,31 @@
 					</li>
 				{% endfor %}
 			{% if user.is_authenticated %}
-			<li>
-				<a href="{% url 'auth:edit' %}">{{ user.first_name|default:user.username }}</a>
-			</li>
-			<li>
-				{% if basket %}
-					<a href="{% url 'basket:view' %}">Basket</a>
-				{% endif %}
-			</li>
+				<li>
+					<div class="dropdown">
+					<a class="btn dropdown-toggle" href="" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+						{{ user.first_name|default:user.username }}</a>
+						<ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+							<li><a href="{% url 'auth:edit' %}" class="dropdown-item">Profile</a></li>
+							<li><a href="{% url 'orders:orders_list' %}" class="dropdown-item">Orders</a></li>
+							<li><a href="{% url 'admin_staff:users' %}" class="dropdown-item">Admin Panel</a></li>
+							{% if basket %}
+								<li><a href="{% url 'basket:view' %}" class="dropdown-item">Basket ({{ basket.0.total_quantity }} psc.)</a></li>
+							{% endif %}
+							{% if user.is_authenticated %}
+								<li><a href="{% url 'auth:logout' %}" class="dropdown-item">Logout</a></li>
+							{% endif %}
+						</ul>
+					</div>
+				</li>
 			{% endif %}
 			<li>
-				{% if user.is_authenticated %}
-					<a href="{% url 'auth:logout' %}">Logout</a>
-				{% else %}
+				{% if not user.is_authenticated %}
 					<a href="{% url 'auth:login' %}">Login</a>
 				{% endif %}
 			</li>
 
-			</ul>
-	<a href="#" class="search"></a>
-    <a href="#" class="basket"></a>
+		</ul>
+<!--	<a href="#" class="search"></a>
+    <a href="#" class="basket"></a> -->
 </div>
