@@ -1,0 +1,12 @@
+{% if object.status == 'FM' %}
+    <div class="container">
+        <div class="d-flex justify-content-around">
+               <a href="{% url 'orders:order_forming_complete' object.pk %}" class="btn btn-primary">Buy</a>
+               <a href="{% url 'orders:order_delete' object.pk %}" class="btn btn-primary">Delete</a>
+        </div>
+    </div>
+{% endif %}
+<div class="btn-group col">
+       <a href="{% url 'orders:orders_list' %}" class="btn btn-outline-primary">To orders</a>
+       <a href="{% url 'main' %}" class="btn btn-outline-primary">Home</a>
+</div>
