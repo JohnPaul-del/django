@@ -1,9 +1,16 @@
 from django.db import models
 from django.conf import settings
 from django.db.models import PositiveIntegerField
-
-import basketapp
 from mainapp.models import Product
+
+
+class BasketQuerySet(models.QuerySet):
+
+    def delete(self):
+        for object in self:
+            object.product.quantity += object.quantity
+            object.product.save()
+        super(BasketQuerySet, self).delete()
 
 
 class Basket(models.Model):
