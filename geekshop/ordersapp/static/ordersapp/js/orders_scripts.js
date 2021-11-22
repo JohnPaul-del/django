@@ -62,8 +62,44 @@ window.onload = function() {
         removed: deleteOrderItem
     });
 
+    if(!order_total_quantity){
+        orderSummaryRecalculate();
+    }
+
+    function orderSummaryRecalculate(){
+        order_total_quantity = 0;
+        order_total_price = 0;
+        for (let i = 0; i < total_forms; i++){
+            order_total_quantity +=quantity_arr[i];
+            order_total_price += quantity_arr[i] * price_arr[i];
+        }
+        $('.order_total_quantity').html(order_total_quantity.to_string());
+        $('.order_total_cost').html(Number(order_total_price.to_fixed(2).to_string()));
+    }
+
     $('.order_form_select').change(function() {
         let target = event.target;
-        console.log(target);
+        orderitem_num = parseInt(target.name.match(/\d+/)[0]);
+        let orderitem_product_pk = target.options[target.selectedIndex].value;
+        if(orderitem_product_pk){
+            $.ajax({
+                url: `/orders/product/${orderitem_product_pk}/price/`,
+                success: function(data) {
+                    if(data.price){
+                        price_arr[orderitem_num] = parseFloat(data.price);
+                        if(isNaN(quantity_arr[orderitem_num])){
+                            quantity_arr[orderitem_num] = 0;
+                        }
+                        let price_html = '<span>' + data.price.toString().replace('.', ',') + '</span> R';
+                        let current_tr = $('.order_form table').find('tr:eq(' + (orderitem_num +1) + ')');
+                        current_tr.find('td:eq(2)').html(price_html);
+                        if(isNaN(current_tr.find('input[type="number"]').val())){
+                            current_tr.find('input[type="number"]').val(0);
+                        }
+                        orderSummaryRecalculate();
+                    }
+                }
+            });
+        }
     });
 };

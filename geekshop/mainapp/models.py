@@ -43,6 +43,21 @@ class Product(models.Model):
         verbose_name='active',
         default=True
     )
+    created = models.DateTimeField(
+        auto_now_add=True
+    )
+    updated = models.DateTimeField(
+        auto_now=True
+    )
+
+    @staticmethod
+    def get_items():
+        return Product.objects.filter(is_active=True, quantity__gte=1).order_by('category', 'name')
 
     def __str__(self):
         return f"{self.name} ({self.category.name})"
+
+    class Meta:
+        ordering = ['-updated']
+        verbose_name = 'product'
+        verbose_name_plural = 'product'
