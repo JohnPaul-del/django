@@ -10,7 +10,7 @@
 			{% if user.is_authenticated %}
 				<li>
 					<div class="dropdown">
-					<a class="btn dropdown-toggle" href="" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+					<a class="dropdown-toggle" href="" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
 						{{ user.first_name|default:user.username }}</a>
 						<ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
 							<li><a href="{% url 'auth:edit' %}" class="dropdown-item">Profile</a></li>
