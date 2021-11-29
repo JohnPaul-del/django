@@ -1,0 +1,10 @@
+http://185.46.10.150/
+http://185.46.10.150/products/
+http://185.46.10.150/contact/
+http://185.46.10.150/products/category/1/
+http://185.46.10.150/products/category/2/
+http://185.46.10.150/products/category/3/
+http://185.46.10.150/products/category/4/
+http://185.46.10.150/basket/
+http://185.46.10.150/order/
+http://185.46.10.150/auth/edit/
