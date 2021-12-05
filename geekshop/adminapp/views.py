@@ -1,3 +1,7 @@
+from django.db import connection
+from django.db.models.signals import pre_save
+from django.dispatch import receiver
+from django.db.models import F
 from django.shortcuts import render, get_object_or_404, reverse
 from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy
@@ -59,57 +63,32 @@ def categories(request):
     return render(request, 'adminapp/categories.html', context)
 
 
-class CategoryCreateView(CreateView):
+def category_create():
+    pass
+
+
+class PoductCategoryUpdateView(UpdateView):
     model = ProductCategory
     template_name = 'adminapp/category_update.html'
     success_url = reverse_lazy('admin_staff:categories')
-    fields = '__all__'
+    form_class = ProductCategoryEditForm
 
-# def category_create(request):
-#     title = 'Create Category'
-#     if request.method == 'POST':
-#         category_form = ProductCategoryEditForm(request.POST, request.FILES)
-#         if category_form.is_valid():
-#             category_form.save()
-#             return HttpResponseRedirect(reverse('admin:categories'))
-#     else:
-#         category_form = ProductCategoryEditForm()
-#     context = {
-#         'title': title,
-#         'new_category': category_form,
-#     }
-#     return render(request, 'adminapp/category_update.html', context)
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Category: Edit'
+        return context
 
-
-def category_update(request, pk):
-    title = 'Edit category'
-    edit_category = get_object_or_404(ProductCategory, pk=pk)
-    if request.method == 'POST':
-        edit_form = ProductCategoryEditForm(request.POST, request.FILES, instance=edit_category)
-        if edit_form.is_valid():
-            edit_form.save()
-            return HttpResponseRedirect(reverse('admin:categories'))
-    else:
-        edit_form = ProductCategoryEditForm(instance=edit_category)
-    context = {
-        'title': title,
-        'edit_form': edit_form,
-    }
-    return render(request, 'adminapp/category_update.html', context)
+    def form_valid(self, form):
+        if 'discount' in form.cleaned_data:
+            discount = form.cleaned_data['discount']
+            if discount:
+                self.object.product_set.update(price=F('price') * (1 - discount / 100))
+                db_profile_by_type(self.__class__, 'UPDATE', connection.queries)
+        return super().form_valid(form)
 
 
 def category_delete(request, pk):
-    title = 'Delete Category'
-    category = get_object_or_404(ProductCategory, pk=pk)
-    if request.method == 'POST':
-        category.is_active = False
-        category.save()
-        return HttpResponseRedirect(reverse('admin_staff:categories'))
-    context = {
-        'title': title,
-        'category_to_del': category
-    }
-    return render(request, 'adminapp/category_delete.html', context)
+    pass
 
 
 def products(request, pk):
@@ -122,6 +101,21 @@ def products(request, pk):
         'objects': product_list,
     }
     return render(request, 'adminapp/products.html', context)
+
+
+class CategoryProductsReadView(ListView):
+    model = Product
+    context_object_name = 'objects'
+    template_name = 'adminapp/products.html'
+
+    def get_queryset(self):
+        filtered_products = Product.objects.filter(category__pk=self.kwargs['pk'])
+        return filtered_products
+
+    def get_context_data(self):
+        context = super(CategoryProductsReadView, self).get_context_data()
+        context['category'] = self.kwargs.get('pk')
+        return context
 
 
 def product_create(request, pk):
@@ -140,16 +134,6 @@ def product_create(request, pk):
         'category': category,
     }
     return render(request, 'adminapp/product_update.html', context)
-
-
-def product_read(request, pk):
-    title = 'Product info'
-    product = get_object_or_404(Product, pk=pk)
-    context = {
-        'title': title,
-        'object': product,
-    }
-    return render(request, 'adminapp/product_read.html', context)
 
 
 def product_update(request, pk):
@@ -182,3 +166,19 @@ def product_delete(request, pk):
         'product_to_del': product,
     }
     return render(request, 'adminapp/product_delete.html', context)
+
+
+def db_profile_by_type(prefix, type, queries):
+    update_queries = list(filter(lambda x: type in x['sql'], queries))
+    print(f'db_profile {type} for {prefix}')
+    [print(query['sql']) for query in update_queries]
+
+
+@receiver(pre_save, sender=ProductCategory)
+def product_is_active_update_product_category_save(sender, instance, **kwargs):
+    if instance.pk:
+        if instance.is_active:
+            instance.product_set.update(is_active=True)
+        else:
+            instance.product_set.update(is_active=False)
+        db_profile_by_type(sender, 'UPDATE', connection.queries)

@@ -33,7 +33,8 @@
                                     <a href="{% url 'admin_staff:category_update' category.pk %}">Edit</a>
                                 </td>
                                 <td>
-                                    <a {% if not category.is_active %} class="invisible" {% endif %} href="{% url 'admin_staff:category_delete' pk=category.pk %}">
+                                    <a {% if not category.is_active %} class="invisible" {% endif %}
+                                       href="{#% url 'admin_staff:category_delete' pk=category.pk %}#">
                                         <i class="fa fa-times-circle"></i>
                                     </a>
                                 </td>
