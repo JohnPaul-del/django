@@ -48,15 +48,15 @@ def products(request, pk=None, page=1):
         }
         return render(request, "mainapp/products.html", context)
 
-    hot_product = get_hot_product()
-    same_products = get_same_products(hot_product)
+    # hot_product = get_hot_product()
+    # same_products = get_same_products(hot_product)
     # products = get_products()[:3]
     context = {
         'title': title,
         'header_menu': header_menu,
-        'hot_product': hot_product,
+        # 'hot_product': hot_product,
         'links_menu': links_menu,
-        'same_products': same_products,
+        # 'same_products': same_products,
         # 'products': products,
     }
     return render(request, "mainapp/products.html", context)
@@ -152,6 +152,6 @@ def get_same_products(hot_product):
     return same_products
 
 
-def get_hot_product():
-    products = Product.objects.all()
-    return random.sample(list(products), 1)[0]
+# def get_hot_product():
+#     # products = Product.objects.all()
+#     return random.choice(get_products())
